@@ -9,18 +9,49 @@ class Node:
 
 class RedBlackTree:
     def __init__(self):
-        self.NIL = Node(key=None, color="black")
-        self.root = self.NIL
+        self.root = None
 
+    # Basic BST Insert
     def insert(self, key):
-        print(f"Inserting {key}")
-        # we will implement this next
+        new_node = Node(key)
 
+        # Case 1: Tree is empty
+        if self.root is None:
+            self.root = new_node
+            self.root.color = "black"  # root must be black in RB tree
+            return
+
+        # Otherwise find correct position
+        current = self.root
+        parent = None
+
+        while current is not None:
+            parent = current
+            if key < current.key:
+                current = current.left
+            else:
+                current = current.right
+
+        new_node.parent = parent
+
+        if key < parent.key:
+            parent.left = new_node
+        else:
+            parent.right = new_node
+
+    # Search
     def search(self, key):
         current = self.root
-        while current != self.NIL and current.key != key:
+        while current is not None and current.key != key:
             if key < current.key:
                 current = current.left
             else:
                 current = current.right
         return current
+
+    # Inorder Traversal
+    def inorder(self, node):
+        if node is not None:
+            self.inorder(node.left)
+            print(f"{node.key} ({node.color})")
+            self.inorder(node.right)
